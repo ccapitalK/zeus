@@ -1,0 +1,6 @@
+[package]
+name = "zeus"
+version = "0.1.0"
+authors = ["Sahan Fernando <sahan.h.fernando@gmail.com>"]
+
+[dependencies]
