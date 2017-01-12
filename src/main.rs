@@ -1,3 +1,4 @@
+extern crate byteorder;
 mod cpu;
 
 use std::io::{self,Write};
@@ -5,6 +6,7 @@ use std::io::{self,Write};
 fn help_string() {
     println!("Commands:");
     println!("    d[ump] <off>:   dump 32 words of ram starting at offset");
+    println!("    h[elp]:         print this help message");
     println!("    l[oad]:         load file into offset 0x8000");
     println!("    p[rint]:        print current state of cpu");
     println!("    r[eset]:        reset cpu state (will load rom)");
@@ -60,14 +62,16 @@ fn main() {
                 "l"|"load" => {
                     print!("File name: ");
                     flush_stdout();
-                    let mut input = String::new();
-                    io::stdin().read_line(&mut input)
+                    let mut file_name = String::new();
+                    io::stdin().read_line(&mut file_name)
                         .expect("Failed to read line from stdin");
-                    if let Err(e) = cpu.load_rom(input) {
-                        println!("{}", e);
+                    file_name.pop();
+                    if let Err(e) = cpu.load_rom(file_name.as_str()) {
+                        println!("Failed to read \"{}\": {}", file_name, e);
                         continue 'main;
                     }
                 },
+                "h"|"help" => help_string(),
                 _ => help_string(),
             }
         }
